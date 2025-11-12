@@ -1,0 +1,53 @@
+Tablas:
+
+-Front -> checklist expos
+
+-Inventario:
+	Nombre String
+	Categoria String
+	Precio produccion Float
+	P.V.P Float
+	Stock Int
+	Packaging Int
+	Status: In stock, Sold out, Coming soon Enum
+	Notes String
+
+(Cada producto tiene varios precios, en precio, select para cambiarlo y que cambie el stock, stock total default)
+(Tablas por producto en el front)
+
+-Pedidos:
+	Nombre String
+	Fecha Date
+	Cantidad Int
+	Fecha llegada Date
+
+-Balance:
+(Por year)
+	Mes Date
+	Nombre String
+	Cantidad Float
+	Total year Float
+
+-Calendario Expos
+-Balance Expos -> Neto Expos add a beneficios mes auto
+
+Tablas anual: num pedidos, bruto etsy, gastos envio, beneficio total y total al year de beneficio
+
+-Etsy: -------------
+	
+Ventas por year y mes
+
+-Tabla pedidos, q aparezcan por mes y year (filter de money manager):
+	Nombre String
+	Cantidad Int
+	Fecha Date
+	Venta Float
+	Impuestos Etsy Float
+	Paquete Float
+	Envio Float
+	Precio productos Float
+	Ganancia neta Float
+	Donde Enum: UE, EEUU, Europa pero no UE
+	Exento de IVA: Venta - Impuesto Etsy cuando es fuera UE Int con recuento total
+	??Contrato Boolean y q se sumen por separado, con contrato no se suman al total, mostrar a parte
+	Enviado Boolean/Enum: Enviado, no enviado;
