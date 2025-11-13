@@ -72,6 +72,13 @@ public class ProductService {
         return toDto(product);
     }
 
+    public List<ProductDto> getLatest5ProductsForCurrentUser() {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        List<ProductEntity> top5 = productRepository.findTop5ByProfileIdOrderByUpdatedAtDesc(currentProfile.getId());
+
+        return top5.stream().map(this::toDto).toList();
+    }
+
     //HELPER METHODS
 
     private ProductEntity toEntity(ProductDto productDto, ProfileEntity profile, CategoryEntity category) {

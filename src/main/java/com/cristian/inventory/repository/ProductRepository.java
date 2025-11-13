@@ -11,4 +11,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     List<ProductEntity> findByProfileIdAndCreatedAtBetween(Long profileId, LocalDateTime startDate, LocalDateTime endDate);
     Optional<ProductEntity> findByIdAndProfileId(Long productId, Long profileId);
+    List<ProductEntity> findTop5ByProfileIdOrderByUpdatedAtDesc(Long profileId);
 }
