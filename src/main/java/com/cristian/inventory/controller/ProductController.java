@@ -27,4 +27,10 @@ public class ProductController {
         List<ProductDto> products = productService.getCurrentMonthProductsForCurrentUser();
         return ResponseEntity.ok(products);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
 }

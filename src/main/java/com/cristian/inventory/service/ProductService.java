@@ -43,6 +43,18 @@ public class ProductService {
         return list.stream().map(this::toDto).toList();
     }
 
+    public void deleteProduct(Long id) {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        ProductEntity product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        if (!product.getProfile().getId().equals(currentProfile.getId())) {
+            throw new RuntimeException("Unauthorized to delete this product");
+        }
+
+        productRepository.delete(product);
+    }
+
     //HELPER METHODS
 
     private ProductEntity toEntity(ProductDto productDto, ProfileEntity profile, CategoryEntity category) {
