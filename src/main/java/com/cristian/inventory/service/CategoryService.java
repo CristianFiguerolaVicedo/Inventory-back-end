@@ -54,6 +54,17 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
 
+    public CategoryDto updateCategory(Long categoryId, CategoryDto categoryDto) {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        CategoryEntity category = categoryRepository.findByIdAndProfileId(categoryId, currentProfile.getId())
+                .orElseThrow(() -> new RuntimeException("Category not found or not accessible"));
+
+        category.setName(categoryDto.getName());
+        category = categoryRepository.save(category);
+
+        return toDto(category);
+    }
+
     //HELPER METHODS
 
     private CategoryEntity toEntity(CategoryDto categoryDto, ProfileEntity profile) {
