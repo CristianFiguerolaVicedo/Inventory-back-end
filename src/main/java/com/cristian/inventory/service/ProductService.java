@@ -55,6 +55,23 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    public ProductDto updateProduct(Long productId, ProductDto productDto) {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        ProductEntity product = productRepository.findByIdAndProfileId(productId, currentProfile.getId())
+                .orElseThrow(() -> new RuntimeException("Product not found or not accessible"));
+
+        product.setName(productDto.getName());
+        product.setProductionPrice(productDto.getProductionPrice());
+        product.setPvp(productDto.getPvp());
+        product.setStock(productDto.getStock());
+        product.setPackaging(productDto.getPackaging());
+        product.setStatus(productDto.getStatus());
+        product.setNotes(productDto.getNotes());
+        product = productRepository.save(product);
+
+        return toDto(product);
+    }
+
     //HELPER METHODS
 
     private ProductEntity toEntity(ProductDto productDto, ProfileEntity profile, CategoryEntity category) {
