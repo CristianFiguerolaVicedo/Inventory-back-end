@@ -10,6 +10,9 @@ import com.cristian.inventory.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,6 +31,16 @@ public class ProductService {
         newProduct = productRepository.save(newProduct);
 
         return toDto(newProduct);
+    }
+
+    public List<ProductDto> getCurrentMonthProductsForCurrentUser() {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        LocalDate now = LocalDate.now();
+        LocalDateTime startDate = now.withDayOfMonth(1).atStartOfDay();
+        LocalDateTime endDate = now.withDayOfMonth(now.lengthOfMonth()).atTime(23, 59, 59);
+        List<ProductEntity> list = productRepository.findByProfileIdAndCreatedAtBetween(currentProfile.getId(), startDate, endDate);
+
+        return list.stream().map(this::toDto).toList();
     }
 
     //HELPER METHODS
@@ -58,6 +71,8 @@ public class ProductService {
                 .packaging(product.getPackaging())
                 .status(product.getStatus())
                 .notes(product.getNotes())
+                .createdAt(product.getCreatedAt())
+                .updatedAt(product.getUpdatedAt())
                 .build();
     }
 }
