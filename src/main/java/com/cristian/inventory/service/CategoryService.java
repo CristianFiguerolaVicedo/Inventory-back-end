@@ -42,6 +42,18 @@ public class CategoryService {
         return categories.stream().map(this::toDto).toList();
     }
 
+    public void deleteCategory(Long id) {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        CategoryEntity category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        if (!category.getProfile().getId().equals(currentProfile.getId())) {
+            throw new RuntimeException("Unauthorized to delete this category");
+        }
+
+        categoryRepository.delete(category);
+    }
+
     //HELPER METHODS
 
     private CategoryEntity toEntity(CategoryDto categoryDto, ProfileEntity profile) {
