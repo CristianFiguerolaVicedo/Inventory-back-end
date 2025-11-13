@@ -7,6 +7,8 @@ import com.cristian.inventory.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -24,6 +26,20 @@ public class CategoryService {
         newCategory = categoryRepository.save(newCategory);
 
         return toDto(newCategory);
+    }
+
+    public List<CategoryDto> getCategoriesForCurrentUser() {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        List<CategoryEntity> categories = categoryRepository.findByProfileId(currentProfile.getId());
+
+        return categories.stream().map(this::toDto).toList();
+    }
+
+    public List<CategoryDto> getCategoriesByNameForCurrentUser(String name) {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        List<CategoryEntity> categories = categoryRepository.findByNameAndProfileId(name, currentProfile.getId());
+
+        return categories.stream().map(this::toDto).toList();
     }
 
     //HELPER METHODS
