@@ -36,14 +36,4 @@ public class ProfileEntity {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    private Boolean isActive;
-    private String activationToken;
-
-    @PrePersist
-    public void prePersist() {
-        if (this.isActive == null) {
-            isActive = false;
-        }
-    }
 }
