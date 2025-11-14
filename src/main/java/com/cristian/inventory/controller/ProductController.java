@@ -39,4 +39,6 @@ public class ProductController {
         ProductDto updatedProduct = productService.updateProduct(id, productDto);
         return ResponseEntity.ok(updatedProduct);
     }
+
+
 }

@@ -8,6 +8,7 @@ import com.cristian.inventory.entity.ProfileEntity;
 import com.cristian.inventory.repository.CategoryRepository;
 import com.cristian.inventory.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -77,6 +78,20 @@ public class ProductService {
         List<ProductEntity> top5 = productRepository.findTop5ByProfileIdOrderByUpdatedAtDesc(currentProfile.getId());
 
         return top5.stream().map(this::toDto).toList();
+    }
+
+    public List<ProductDto> filterProducts(Long categoryId, LocalDateTime startDate, LocalDateTime endDate, String keyword, Sort sort) {
+        if (keyword == null) keyword = "";
+
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        List<ProductEntity> listProducts = productRepository.filterProducts(currentProfile.getId(), startDate, endDate, keyword, sort);
+        if (categoryId != null) {
+            listProducts = listProducts.stream()
+                    .filter(p -> p.getCategory().getId().equals(categoryId))
+                    .toList();
+        }
+
+        return listProducts.stream().map(this::toDto).toList();
     }
 
     //HELPER METHODS
