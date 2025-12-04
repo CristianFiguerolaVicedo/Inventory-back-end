@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 public class FilterDto {
 
     private Long categoryId;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private String creationDate;
     private String keyword;
     private String sortField;
     private String sortOrder;

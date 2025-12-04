@@ -1,6 +1,5 @@
 package com.cristian.inventory.entity;
 
-import com.cristian.inventory.util.ProductStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,33 +13,34 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_products")
+@Table(name = "tbl_sales")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductEntity {
+public class SaleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String name;
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SaleDetailEntity> details;
+
+    private LocalDate date;
+    private Float totalSale;
+    private Float taxes;
+    private Float packaging;
+    private Float sendingFees;
+    private Float productionFees;
+    private Float totalNet;
+    private Boolean iva;
+    private Boolean sent;
+    private Boolean contract;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private CategoryEntity category;
-
-    private Float productionPrice;
-    private Float pvp;
-    private Integer stock;
-    private Integer packaging;
-
-    @Enumerated(EnumType.STRING)
-    private ProductStatus status;
-
-    private String notes;
+    @JoinColumn(name = "profile_id", nullable = false)
+    private ProfileEntity profile;
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -48,11 +48,4 @@ public class ProductEntity {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", nullable = false)
-    private ProfileEntity profile;
-
-    @OneToMany(mappedBy = "product")
-    private List<SaleDetailEntity> saleDetails;
 }
