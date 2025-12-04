@@ -11,6 +11,8 @@ import com.cristian.inventory.repository.SaleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,7 +29,7 @@ public class SaleService {
         SaleEntity sale = toEntity(saleDto, profile);
 
         if (sale.getDetails() == null || sale.getDetails().isEmpty()) {
-            throw new RuntimeException("La venta debe tener al menos un producto");
+            throw new RuntimeException("A sale must have at least one product");
         }
 
         float subtotal = 0f;
@@ -53,6 +55,20 @@ public class SaleService {
         SaleEntity savedSale = saleRepository.save(sale);
 
         return toDto(savedSale);
+    }
+
+    public List<SaleDto> getCurrentMonthSalesForCurrentUser() {
+        ProfileEntity profile = profileService.getCurrentProfile();
+
+        LocalDate now = LocalDate.now();
+        LocalDateTime startDate = now.withDayOfMonth(1).atStartOfDay();
+        LocalDateTime endDate = now.withDayOfMonth(now.lengthOfMonth()).atTime(23, 59, 59);
+
+        List<SaleEntity> sales = saleRepository.findByProfileIdAndCreatedAtBetween(profile.getId(), startDate, endDate);
+
+        return sales.stream()
+                .map(this::toDto)
+                .toList();
     }
 
     //HELPER METHODS
@@ -99,6 +115,7 @@ public class SaleService {
                 .toList();
 
         return SaleDto.builder()
+                .id(sale.getId())
                 .date(sale.getDate())
                 .iva(sale.getIva())
                 .sent(sale.getSent())
