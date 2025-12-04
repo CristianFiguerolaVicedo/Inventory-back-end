@@ -77,7 +77,7 @@ public class SaleService {
                     return SaleDetailEntity.builder()
                             .product(product)
                             .quantity(detailDto.getQuantity())
-                            .unitPrice(detailDto.getUnitPrice())
+                            .unitPrice(product.getPvp())
                             .sale(sale)
                             .build();
                 })
@@ -94,7 +94,6 @@ public class SaleService {
                 .map(detail -> SaleDetailDto.builder()
                         .productId(detail.getProduct().getId())
                         .quantity(detail.getQuantity())
-                        .unitPrice(detail.getUnitPrice())
                         .build()
                 )
                 .toList();

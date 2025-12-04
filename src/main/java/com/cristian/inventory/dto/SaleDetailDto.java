@@ -13,5 +13,4 @@ public class SaleDetailDto {
 
     private Long productId;
     private Integer quantity;
-    private Float unitPrice;
 }
