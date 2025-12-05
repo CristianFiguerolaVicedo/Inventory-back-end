@@ -34,4 +34,9 @@ public class SaleController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<SaleDto> updateSale(@PathVariable Long id, @RequestBody SaleDto saleDto) {
+        SaleDto updatedProduct = saleService.updateSale(id, saleDto);
+        return ResponseEntity.ok(updatedProduct);
+    }
 }

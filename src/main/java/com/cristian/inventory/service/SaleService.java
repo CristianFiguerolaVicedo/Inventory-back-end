@@ -51,6 +51,7 @@ public class SaleService {
         sale.setTaxes(taxes);
         sale.setTotalSale(totalSale);
         sale.setTotalNet(totalNet);
+        sale.setDate(LocalDate.now());
 
         SaleEntity savedSale = saleRepository.save(sale);
 
@@ -81,6 +82,23 @@ public class SaleService {
         }
 
         saleRepository.delete(sale);
+    }
+
+    public SaleDto updateSale (Long saleId, SaleDto saleDto) {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        SaleEntity sale = saleRepository.findByIdAndProfileId(saleId, currentProfile.getId())
+                .orElseThrow(() -> new RuntimeException("Sale not found or not accessible"));
+
+        sale.setDate(LocalDate.now());
+        sale.setIva(saleDto.getIva());
+        sale.setSent(saleDto.getSent());
+        sale.setContract(saleDto.getContract());
+        sale.setPackaging(saleDto.getPackaging());
+        sale.setSendingFees(saleDto.getSendingFees());
+        sale.setProductionFees(saleDto.getProductionFees());
+        sale = saleRepository.save(sale);
+
+        return toDto(sale);
     }
 
     //HELPER METHODS
