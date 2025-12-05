@@ -27,4 +27,11 @@ public class SaleController {
         List<SaleDto> sales = saleService.getCurrentMonthSalesForCurrentUser();
         return ResponseEntity.ok(sales);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSale(@PathVariable Long id) {
+        saleService.deleteSale(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

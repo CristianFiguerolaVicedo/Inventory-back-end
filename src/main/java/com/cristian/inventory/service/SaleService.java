@@ -71,6 +71,18 @@ public class SaleService {
                 .toList();
     }
 
+    public void deleteSale(Long id) {
+        ProfileEntity currentProfile = profileService.getCurrentProfile();
+        SaleEntity sale = saleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sale not found"));
+
+        if (!sale.getProfile().getId().equals(currentProfile.getId())) {
+            throw new RuntimeException("Unauthorized to delete this sale");
+        }
+
+        saleRepository.delete(sale);
+    }
+
     //HELPER METHODS
 
     private SaleEntity toEntity(SaleDto saleDto, ProfileEntity profile) {
