@@ -7,6 +7,9 @@ import com.cristian.inventory.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -20,6 +23,16 @@ public class EventService {
         newEvent = eventRepository.save(newEvent);
 
         return toDto(newEvent);
+    }
+
+    public List<EventDto> getCurrentMonthEventsForCurrentUser() {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.withDayOfMonth(1);
+        LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+        List<EventEntity> list = eventRepository.findByProfileIdAndDateBetween(profile.getId(), startDate, endDate);
+
+        return list.stream().map(this::toDto).toList();
     }
 
     //HELPER METHODS
