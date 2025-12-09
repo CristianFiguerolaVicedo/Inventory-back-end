@@ -45,13 +45,31 @@ public class SaleService {
         float sendingFees = sale.getSendingFees() != null ? sale.getSendingFees() : 0f;
         float productionFees = sale.getProductionFees() != null ? sale.getProductionFees() : 0f;
 
-        float totalSale = subtotal + taxes;
-        float totalNet = totalSale + packaging + sendingFees + productionFees;
+        float totalSale = subtotal;
+        float totalNet = totalSale - (packaging + sendingFees + productionFees + taxes);
 
         sale.setTaxes(taxes);
         sale.setTotalSale(totalSale);
         sale.setTotalNet(totalNet);
-        sale.setDate(LocalDate.now());
+
+        for (SaleDetailEntity detail : sale.getDetails()) {
+            ProductEntity product = productRepository.findById(detail.getProduct().getId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            if (detail.getQuantity() > product.getStock()) {
+                throw new RuntimeException(
+                        "Not enough stock for product " + product.getName() + ". Available: " + product.getStock()
+                );
+            }
+        }
+
+        for (SaleDetailEntity detail : sale.getDetails()) {
+            ProductEntity product = productRepository.findById(detail.getProduct().getId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+            product.setStock(product.getStock() - detail.getQuantity());
+            productRepository.save(product);
+        }
+
 
         SaleEntity savedSale = saleRepository.save(sale);
 
@@ -89,7 +107,7 @@ public class SaleService {
         SaleEntity sale = saleRepository.findByIdAndProfileId(saleId, currentProfile.getId())
                 .orElseThrow(() -> new RuntimeException("Sale not found or not accessible"));
 
-        sale.setDate(LocalDate.now());
+        sale.setDate(saleDto.getDate());
         sale.setIva(saleDto.getIva());
         sale.setSent(saleDto.getSent());
         sale.setContract(saleDto.getContract());
@@ -139,6 +157,7 @@ public class SaleService {
         List<SaleDetailDto> details = sale.getDetails().stream()
                 .map(detail -> SaleDetailDto.builder()
                         .productId(detail.getProduct().getId())
+                        .productName(detail.getProduct().getName())
                         .quantity(detail.getQuantity())
                         .build()
                 )
@@ -153,7 +172,10 @@ public class SaleService {
                 .packaging(sale.getPackaging())
                 .sendingFees(sale.getSendingFees())
                 .productionFees(sale.getProductionFees())
+                .taxes(sale.getTaxes())
                 .details(details)
+                .totalSale(sale.getTotalSale())
+                .totalNet(sale.getTotalNet())
                 .build();
     }
 

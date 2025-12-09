@@ -22,5 +22,8 @@ public class SaleDto {
     private Float packaging;
     private Float sendingFees;
     private Float productionFees;
+    private Float taxes;
+    private Float totalSale;
+    private Float totalNet;
     private List<SaleDetailDto> details;
 }
