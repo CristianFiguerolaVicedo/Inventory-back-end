@@ -47,6 +47,19 @@ public class EventService {
         eventRepository.delete(event);
     }
 
+    public EventDto updateEvent(Long eventId, EventDto eventDto) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        EventEntity event = eventRepository.findByIdAndProfileId(eventId, profile.getId())
+                .orElseThrow(() -> new RuntimeException("Event not found or not accessible"));
+
+        event.setName(eventDto.getName());
+        event.setDate(eventDto.getDate());
+        event.setDescription(eventDto.getDescription());
+        event = eventRepository.save(event);
+
+        return toDto(event);
+    }
+
     //HELPER METHODS
 
     private EventEntity toEntity(EventDto eventDto, ProfileEntity profile) {
