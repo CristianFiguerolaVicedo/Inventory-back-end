@@ -35,6 +35,18 @@ public class EventService {
         return list.stream().map(this::toDto).toList();
     }
 
+    public void deleteEvent(Long id) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        EventEntity event = eventRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        if (!event.getProfile().getId().equals(profile.getId())) {
+            throw new RuntimeException("Unauthorized to delete this event");
+        }
+
+        eventRepository.delete(event);
+    }
+
     //HELPER METHODS
 
     private EventEntity toEntity(EventDto eventDto, ProfileEntity profile) {

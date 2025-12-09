@@ -28,4 +28,10 @@ public class EventController {
         List<EventDto> events = eventService.getCurrentMonthEventsForCurrentUser();
         return ResponseEntity.ok(events);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+        eventService.deleteEvent(id);
+        return ResponseEntity.noContent().build();
+    }
 }
