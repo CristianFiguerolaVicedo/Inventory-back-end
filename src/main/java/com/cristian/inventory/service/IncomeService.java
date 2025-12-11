@@ -35,6 +35,18 @@ public class IncomeService {
         return list.stream().map(this::toDto).toList();
     }
 
+    public void deleteIncome(Long id) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        IncomeEntity income = incomeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Income not found"));
+
+        if (!income.getProfile().getId().equals(profile.getId())) {
+            throw new RuntimeException("Unauthorized to delete this income");
+        }
+
+        incomeRepository.delete(income);
+    }
+
     //HELPER METHODS
 
     private IncomeEntity toEntity(IncomeDto incomeDto, ProfileEntity profile) {

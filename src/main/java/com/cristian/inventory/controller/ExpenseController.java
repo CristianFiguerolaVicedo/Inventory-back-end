@@ -28,4 +28,10 @@ public class ExpenseController {
         List<ExpenseDto> incomes = expenseService.getCurrentMonthExpensesForCurrentUser();
         return ResponseEntity.ok(incomes);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
+        expenseService.deleteExpense(id);
+        return ResponseEntity.noContent().build();
+    }
 }
