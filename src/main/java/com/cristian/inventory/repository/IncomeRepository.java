@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface IncomeRepository extends JpaRepository<IncomeEntity, Long> {
 
-    List<IncomeEntity> findByProfileIdAndDateBetween(Long profileId, LocalDate startDate, LocalDate endDate);
+    List<IncomeEntity> findByProfileId(Long profileId);
     Optional<IncomeEntity> findByIdAndProfileId(Long incomeId, Long profileId);
     List<IncomeEntity> findTop5ByProfileIdOrderByUpdatedAtDesc(Long profileId);
 }

@@ -29,10 +29,7 @@ public class ExpenseService {
 
     public List<ExpenseDto> getCurrentMonthExpensesForCurrentUser() {
         ProfileEntity profile = profileService.getCurrentProfile();
-        LocalDate now = LocalDate.now();
-        LocalDate startDate = now.withDayOfMonth(1);
-        LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
-        List<ExpenseEntity> list = expenseRepository.findByProfileIdAndDateBetween(profile.getId(), startDate, endDate);
+        List<ExpenseEntity> list = expenseRepository.findByProfileId(profile.getId());
 
         return list.stream().map(this::toDto).toList();
     }

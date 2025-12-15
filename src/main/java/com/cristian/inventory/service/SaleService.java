@@ -55,12 +55,6 @@ public class SaleService {
         for (SaleDetailEntity detail : sale.getDetails()) {
             ProductEntity product = productRepository.findById(detail.getProduct().getId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
-
-            if (detail.getQuantity() > product.getStock()) {
-                throw new RuntimeException(
-                        "Not enough stock for product " + product.getName() + ". Available: " + product.getStock()
-                );
-            }
         }
 
         for (SaleDetailEntity detail : sale.getDetails()) {

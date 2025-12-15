@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
 
-    List<ExpenseEntity> findByProfileIdAndDateBetween(Long profileId, LocalDate startDate, LocalDate endDate);
+    List<ExpenseEntity> findByProfileId(Long profileId);
     Optional<ExpenseEntity> findByIdAndProfileId(Long incomeId, Long profileId);
     List<ExpenseEntity> findTop5ByProfileIdOrderByUpdatedAtDesc(Long profileId);
 }
