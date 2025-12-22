@@ -1,6 +1,6 @@
 ﻿# Inventory App - Back-end
 
-## This is the front-end part of a whole inventory project. You can find the backend repository in this link: <https://github.com/CristianFiguerolaVicedo/Inventory-front-end>
+## This is the back-end part of a whole inventory project. You can find the front-end repository in this link: <https://github.com/CristianFiguerolaVicedo/Inventory-front-end>
 
 This app was made using `Java` for the backend with `Springboot` and `JavaScript` with `React` for the front-end
 
@@ -101,3 +101,4 @@ In this folder there are 2 files:
 - Product Status: An enum for the status field of a product: IN_STOCK, SOLD_OUT or COMING_SOON
 
 ### You can see more details and screenshots in the portfolio of my web: <https://cristianfigvic.free.nf>
+
