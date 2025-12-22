@@ -3,6 +3,7 @@ package com.cristian.inventory.service;
 import com.cristian.inventory.dto.AuthDto;
 import com.cristian.inventory.dto.ProfileDto;
 import com.cristian.inventory.entity.ProfileEntity;
+import com.cristian.inventory.exceptions.EmailAlreadyExistsException;
 import com.cristian.inventory.repository.ProfileRepository;
 import com.cristian.inventory.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -26,6 +28,10 @@ public class ProfileService {
     private final JwtUtil jwtUtil;
 
     public ProfileDto register(ProfileDto profileDto) {
+        if (profileRepository.findByEmail(profileDto.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException("This email is already registered");
+        }
+
         ProfileEntity newProfile = toEntity(profileDto);
         newProfile = profileRepository.save(newProfile);
         return toDto(newProfile);
@@ -36,6 +42,10 @@ public class ProfileService {
 
         return profileRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("Profile with email " + authentication.getName() + " not found"));
+    }
+
+    public List<ProfileDto> getAllUsers() {
+        return profileRepository.findAll().stream().map(this::toDto).toList();
     }
 
     public ProfileDto getPublicProfile(String email) {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,6 +36,12 @@ public class ProfileController {
                     "message", e.getMessage()
             ));
         }
+    }
+
+    @GetMapping("/allusers")
+    public ResponseEntity<List<ProfileDto>> getAllUsers() {
+        List<ProfileDto> allUsers = profileService.getAllUsers();
+        return ResponseEntity.ok(allUsers);
     }
 
     @GetMapping("/profile")
