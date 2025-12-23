@@ -102,3 +102,17 @@ In this folder there are 2 files:
 
 ### You can see more details and screenshots in the portfolio of my web: <https://cristianfigvic.free.nf>
 
+## The Postman collection is also uploaded to this repository in order to be able to test the endpoints.
+
+## In order to run the project there are some variables that the user needs to fill:
+
+- To run it locally: In the `application.properties` file, first you have to be sure that the `spring.profiles.active=prod` is commented. There are 2 variables:
+    - MYSQL_PASSWORD: The password of your local mysql database.
+    - FRONTEND_URL: The URL of the frontend part of the project.
+
+- To run it in production: First, in the application.properties file, you have to make sure the `spring.profiles.active=prod` has to be active, then, in the `application-prod.properties`, there are 3 variables, which are the ones in charge of connecting to the production database, a PostgreSQL one:
+    - `POSTGRESQL_PASSWORD`: The password of the production database.
+    - `POSTGRESQL_USERNAME`: The username of the database.
+    - `POSTGRESQL_URL`: The external host of the database.
+
+
